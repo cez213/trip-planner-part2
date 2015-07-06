@@ -67,6 +67,13 @@
 	        opts.position = new google.maps.LatLng(location[0], location[1]);
 	        opts.map = map;
 	        var marker = new google.maps.Marker(opts);
+	        return marker;
+	    }
+
+	    function setAllMap(markers, map){
+	    	for(var i = 0; i < markers.length; i++){
+	    		markers[i].setMap(map);
+	    	}
 	    }
 
 	
@@ -168,6 +175,65 @@
 		    },
 		    {}
 		]
+
+		var currentDay = $('#day-title').text().match(/\d/)[0];
+
+		var days = [{
+			Hotel: {name: "", marker: null},
+			Restaurant: [],
+			ThingsToDo: []
+		}, {
+			Hotel: {name: "", marker: null},
+			Restaurant: [],
+			ThingsToDo: []
+		}, {
+			Hotel: {name: "", marker: null},
+			Restaurant: [],
+			ThingsToDo: []
+		}];
+
+		function addElement(text){
+			return '<div class="itinerary-item"><span class="title">'+ text +'</span><button class="btn btn-xs btn-danger remove btn-circle">x</button>';
+		}
+
+		function setDay(day, dayBtn){
+			$('#day-title span').text('Day' + day);
+
+			$('.hotel-item').empty();
+			$('.restaurant-item').empty();
+			$('.todo-item').empty();
+
+			var selectedDay = days[day-1];
+
+/*			if(selectedDay.Hotel.name){
+
+			}*/
+			//check if days itinerary items are defined
+			//change current day to button clicked
+			//change itinerary items to those of the correct day
+
+		}
+
+		function addDay(){
+			var index = Object.keys(days).length + 1;
+			var newBtn = $('<button class="btn btn-circle day-btn">' + index + '</button>');
+			newBtn.insertBefore('#plusBtn');
+			days.push({
+				Hotel: {name: "", marker: null},
+				Restaurant: [],
+				ThingsToDo: []
+			});
+		}
+
+		//remove day
+		function removeDay(){
+			// only for currentDay
+			// check if days array is greater than 1
+			// fix index of other days
+			// remove current day button
+		}
+
+
 		</script>
 	</body>
 </html>

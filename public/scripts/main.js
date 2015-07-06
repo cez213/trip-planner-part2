@@ -1,9 +1,11 @@
 $(document).ready(function(){
+	var marker;
 	$('.hotel-btn').on('click', 'button', function(){
 		var $hotelSelected = $(this).closest('.hotel-btn').find('select').val();
 		
 		$('.hotel-item').append('<li><span class="title">'+ $hotelSelected +'</span><button class="btn btn-xs btn-danger remove btn-circle">x</button></li>');
-
+		/*var newHotel = addElement($hotelSelected);
+		$('hotel-item').append(newHotel);*/
 
 		var hotelLocation;
 		all_hotels.forEach(function(hotel){
@@ -12,15 +14,27 @@ $(document).ready(function(){
 			}
 		})
 
-		drawLocation(hotelLocation, {
-		        icon: '/images/lodging_0star.png'
-		    });
+		marker = drawLocation(hotelLocation, {
+		    icon: '/images/lodging_0star.png'
+		});
+		
+		days[currentDay-1].Hotel = {name: $hotelSelected, marker: marker};
 
-		$('.btn-danger').click(function () {
+/*		$('.btn-danger').click(function () {
 			$(this).closest('li').remove();
-		});	
-
+		});	*/
 	});
+
+	$('.hotel-item').on('click', 'button', function(){
+		var removeButton = $(this);
+		currentDay = parseInt($('#day-title').text().match(/\d/)[0]);
+		console.log(currentDay);
+		for(var i = 0; i < days.length; i++){
+			if(itinerary.day === currentDay){
+				console.log(itinerary[day]);
+			}
+		} 
+	})
 
 	$('.restaurant-btn').on('click', 'button', function(){
 		var $restaurantSelected = $(this).closest('.restaurant-btn').find('select').val();
@@ -34,10 +48,12 @@ $(document).ready(function(){
 			}
 		})
 			
-		drawLocation(restaurantLocation, {
-		        icon: '/images/restaurant.png'
-		    });
-		//push to marker array????
+		marker = drawLocation(restaurantLocation, {
+	        icon: '/images/restaurant.png'
+	    });
+		
+		days[currentDay-1].Restaurant.push({name: $restaurantSelected, marker: marker});
+		console.log(days)
 
 		$('.btn-danger').click(function () {
 			$(this).closest('li').remove();
@@ -61,17 +77,26 @@ $(document).ready(function(){
 			}
 		})
 
-		drawLocation(thingToDoLocation, {
-	            icon: '/images/star-3.png'
+		marker = drawLocation(thingToDoLocation, {
+            icon: '/images/star-3.png'
 		});
+
+		days[currentDay-1].ThingsToDo.push({name: $todoSelected, marker: marker});
 
 		$('.btn-danger').click(function () {
 			$(this).closest('li').remove();
-
 		});
-			
-		
-	});	
+	});
+
+	$('.day-buttons').on('click', 'button', function(){
+		var newDay = $(this);
+		var text = newDay.text();
+		if(text === '+'){
+			addDay();
+		}else{
+			setDay(parseInt(text), newDay);
+		}
+	})	
 
 })
 
