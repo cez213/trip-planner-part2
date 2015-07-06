@@ -207,28 +207,63 @@
 			if(selectedDay.Hotel.name){
 				$('.hotel-item').append($(addElement(selectedDay.Hotel.name)));
 			}
-			if(selectedDay.Hotel.Restaurant){
-				selectedDay.Restaurant.forEach(function(objVal){
-					$('.restaurant-item').append($(addElement(objVal.name)));
-				})
-			}
-			if(selectedDay.Hotel.ThingsToDo){
-				selectedDay.ThingsToDo.forEach(function(objVal){
-					$('.todo-item').append($(addElement(objVal.name)));
-				})
-			}
+
+			selectedDay.Restaurant.forEach(function(objVal){
+				$('.restaurant-item').append($(addElement(objVal.name)));
+			})
+
+			selectedDay.ThingsToDo.forEach(function(objVal){
+				$('.todo-item').append($(addElement(objVal.name)));
+			})
 
 			var previousDay = $('.current-day');
-/*			if(changeDay){
-				//clear markers
-				//setAllMap(dayMarkers(day), map)
-			}*/
+			
+			if(changeDay){
+				clearAllMarkers(dayMarkers(parseInt(previousDay.text())));
+				setAllMap(dayMarkers(day), map);
+			}
 
 			previousDay.removeClass('current-day');
 			dayBtn.addClass('current-day');
 
 		}
 
+		function clearAllMarkers(markers){
+			setAllMap(markers, null);
+		}
+
+		function dayMarkers(day){
+			var hotelMarker = days[day-1].Hotel.marker;
+			var restaurantMarkers = days[day-1].Restaurant.map(function(restaurant){
+				return restaurant.marker;
+			});
+			var thingMarkers = days[day-1].ThingsToDo.map(function(thing){
+				return thing.marker;
+			});
+
+			if (hotelMarker) return thingMarkers.concat(restaurantMarkers, hotelMarker);
+	   	 	return thingMarkers.concat(restaurantMarkers);
+		}
+
+		function addDay(){
+			var index = Object.keys(days).length + 1;
+			var newBtn = $('<button class="btn btn-circle day-btn">' + index + '</button>');
+			newBtn.insertBefore('#plusBtn');
+			days.push({
+				Hotel: {name: "", marker: null},
+				Restaurant: [],
+				ThingsToDo: []
+			});
+		}
+
+		//remove day
+		function removeDay(){
+			
+			// only for currentDay
+			// check if days array is greater than 1
+			// fix index of other days
+			// remove current day button
+		}
 
 
 		</script>

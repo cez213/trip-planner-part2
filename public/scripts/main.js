@@ -31,7 +31,7 @@ $(document).ready(function(){
 		var removeButton = $(this);
 		var text = removeButton.prev().text();
 
-		currentDay = parseInt($('.current-day').text());
+		var currentDay = parseInt($('.current-day').text());
 		days[currentDay-1].Hotel.name = "";
 		days[currentDay-1].Hotel.marker.setMap(null);
 		days[currentDay-1].Hotel.marker = null;
@@ -66,7 +66,7 @@ $(document).ready(function(){
 		var removeButton = $(this);
 		var text = removeButton.prev().text();
 
-		currentDay = parseInt($('.current-day').text());
+		var currentDay = parseInt($('.current-day').text());
 		// refactor by making a function for emptying the DOM
 		days[currentDay-1].Restaurant.forEach(function(restaurant, index){
 			if(restaurant.name === text){
@@ -110,7 +110,7 @@ $(document).ready(function(){
 		var removeButton = $(this);
 		var text = removeButton.prev().text();
 
-		currentDay = parseInt($('.current-day').text());
+		var currentDay = parseInt($('.current-day').text());
 		// refactor by making a function for emptying the DOM
 		days[currentDay-1].ThingsToDo.forEach(function(thingToDo, index){
 			if(thingToDo.name === text){
@@ -130,9 +130,13 @@ $(document).ready(function(){
 			addDay();
 		}else{
 			setDay(parseInt(text), newDay, true);
-			//newDay.addClass('.current-day');
 		}
-	})	
+	})
+
+	$('.heading-btn').on('click', 'button', function(){
+		removeDay();
+	})
+
 
 })
 
