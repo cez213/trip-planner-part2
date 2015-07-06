@@ -75,7 +75,6 @@
 	    		markers[i].setMap(map);
 	    	}
 	    }
-
 	
 		$(document).ready(function() {
 		    initialize_gmaps();
@@ -196,42 +195,40 @@
 			return '<div class="itinerary-item"><span class="title">'+ text +'</span><button class="btn btn-xs btn-danger remove btn-circle">x</button>';
 		}
 
-		function setDay(day, dayBtn){
-			$('#day-title span').text('Day' + day);
-
-			$('.hotel-item').empty();
-			$('.restaurant-item').empty();
-			$('.todo-item').empty();
+		function setDay(day, dayBtn, changeDay){
+			$('#day-title span').text('Day ' + day);
+			
+			$('.hotel-item').empty().append('<h4>My Hotel</h4>');
+			$('.restaurant-item').empty().append('<h4>My Restaurants</h4>');
+			$('.todo-item').empty().append('<h4>My Things To Do</h4>');
 
 			var selectedDay = days[day-1];
 
-/*			if(selectedDay.Hotel.name){
+			if(selectedDay.Hotel.name){
+				$('.hotel-item').append($(addElement(selectedDay.Hotel.name)));
+			}
+			if(selectedDay.Hotel.Restaurant){
+				selectedDay.Restaurant.forEach(function(objVal){
+					$('.restaurant-item').append($(addElement(objVal.name)));
+				})
+			}
+			if(selectedDay.Hotel.ThingsToDo){
+				selectedDay.ThingsToDo.forEach(function(objVal){
+					$('.todo-item').append($(addElement(objVal.name)));
+				})
+			}
 
+			var previousDay = $('.current-day');
+/*			if(changeDay){
+				//clear markers
+				//setAllMap(dayMarkers(day), map)
 			}*/
-			//check if days itinerary items are defined
-			//change current day to button clicked
-			//change itinerary items to those of the correct day
+
+			previousDay.removeClass('current-day');
+			dayBtn.addClass('current-day');
 
 		}
 
-		function addDay(){
-			var index = Object.keys(days).length + 1;
-			var newBtn = $('<button class="btn btn-circle day-btn">' + index + '</button>');
-			newBtn.insertBefore('#plusBtn');
-			days.push({
-				Hotel: {name: "", marker: null},
-				Restaurant: [],
-				ThingsToDo: []
-			});
-		}
-
-		//remove day
-		function removeDay(){
-			// only for currentDay
-			// check if days array is greater than 1
-			// fix index of other days
-			// remove current day button
-		}
 
 
 		</script>

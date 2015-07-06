@@ -1,45 +1,50 @@
 $(document).ready(function(){
 	var marker;
+
+	// add hotel
 	$('.hotel-btn').on('click', 'button', function(){
+		currentDay = parseInt($('.current-day').text());
 		var $hotelSelected = $(this).closest('.hotel-btn').find('select').val();
-		
-		$('.hotel-item').append('<li><span class="title">'+ $hotelSelected +'</span><button class="btn btn-xs btn-danger remove btn-circle">x</button></li>');
-		/*var newHotel = addElement($hotelSelected);
-		$('hotel-item').append(newHotel);*/
+		if(days[currentDay-1].Hotel.name !== ""){
+			return;
+		}else{
+			$('.hotel-item').append(addElement($hotelSelected));
+			
 
-		var hotelLocation;
-		all_hotels.forEach(function(hotel){
-			if(hotel.name === $hotelSelected){
-				hotelLocation = hotel.place[0].location;
-			}
-		})
+			var hotelLocation;
+			all_hotels.forEach(function(hotel){
+				if(hotel.name === $hotelSelected){
+					hotelLocation = hotel.place[0].location;
+				}
+			})
 
-		marker = drawLocation(hotelLocation, {
-		    icon: '/images/lodging_0star.png'
-		});
-		
-		days[currentDay-1].Hotel = {name: $hotelSelected, marker: marker};
-
-/*		$('.btn-danger').click(function () {
-			$(this).closest('li').remove();
-		});	*/
+			marker = drawLocation(hotelLocation, {
+			    icon: '/images/lodging_0star.png'
+			});
+			
+			days[currentDay-1].Hotel = {name: $hotelSelected, marker: marker};
+		}
 	});
 
+	// remove hotel
 	$('.hotel-item').on('click', 'button', function(){
 		var removeButton = $(this);
-		currentDay = parseInt($('#day-title').text().match(/\d/)[0]);
-		console.log(currentDay);
-		for(var i = 0; i < days.length; i++){
-			if(itinerary.day === currentDay){
-				console.log(itinerary[day]);
-			}
-		} 
+		var text = removeButton.prev().text();
+
+		currentDay = parseInt($('.current-day').text());
+		days[currentDay-1].Hotel.name = "";
+		days[currentDay-1].Hotel.marker.setMap(null);
+		days[currentDay-1].Hotel.marker = null;
+
+		removeButton.closest('.itinerary-item').empty();
 	})
 
+	// add restaurants
 	$('.restaurant-btn').on('click', 'button', function(){
+		// var currentDay = parseInt($('.current-day').text());
 		var $restaurantSelected = $(this).closest('.restaurant-btn').find('select').val();
 
-		$('.restaurant-item').append('<li><span class="title">'+ $restaurantSelected +'</span><button class="btn btn-xs btn-danger remove btn-circle">x</button></li>');
+		$('.restaurant-item').append(addElement($restaurantSelected));
 
 		var restaurantLocation;
 		all_restaurants.forEach(function(restaurant){
@@ -53,22 +58,33 @@ $(document).ready(function(){
 	    });
 		
 		days[currentDay-1].Restaurant.push({name: $restaurantSelected, marker: marker});
-		console.log(days)
-
-		$('.btn-danger').click(function () {
-			$(this).closest('li').remove();
-		});
 
 	});
 
-	var todoCounter = 0;
-		
+	// remove restaurants
+	$('.restaurant-item').on('click', 'button', function(){
+		var removeButton = $(this);
+		var text = removeButton.prev().text();
+
+		currentDay = parseInt($('.current-day').text());
+		// refactor by making a function for emptying the DOM
+		days[currentDay-1].Restaurant.forEach(function(restaurant, index){
+			if(restaurant.name === text){
+				removeButton.closest('.itinerary-item').empty();
+				days[currentDay-1].Restaurant[index].name = "";
+				days[currentDay-1].Restaurant[index].marker.setMap(null);
+				days[currentDay-1].Restaurant[index].marker = null;
+			}
+		})
+	})
+
+	// add things to do
 	$('.todo-btn').on('click', 'button', function(){
 		var $todoSelected = $(this).closest('.todo-btn').find('select').val();
 
-		todoCounter++;
-		$('.todo-item').append('<li><span class="title" id="'+todoCounter+'">'+ $todoSelected +'</span><button class="btn btn-xs btn-danger remove btn-circle">x</button></li>');
-		
+		// add if statement so you can't add the same activity twice
+
+		$('.todo-item').append(addElement($todoSelected));
 
 		var thingToDoLocation;
 		all_things_to_do.forEach(function(thingToDo){
@@ -86,15 +102,35 @@ $(document).ready(function(){
 		$('.btn-danger').click(function () {
 			$(this).closest('li').remove();
 		});
+		
 	});
 
+	// remove thing to do
+	$('.todo-item').on('click', 'button', function(){
+		var removeButton = $(this);
+		var text = removeButton.prev().text();
+
+		currentDay = parseInt($('.current-day').text());
+		// refactor by making a function for emptying the DOM
+		days[currentDay-1].ThingsToDo.forEach(function(thingToDo, index){
+			if(thingToDo.name === text){
+				removeButton.closest('.itinerary-item').empty();
+				days[currentDay-1].ThingsToDo[index].name = "";
+				days[currentDay-1].ThingsToDo[index].marker.setMap(null);
+				days[currentDay-1].ThingsToDo[index].marker = null;
+			}
+		})
+	})
+
+	// switch day shown or add new day
 	$('.day-buttons').on('click', 'button', function(){
 		var newDay = $(this);
 		var text = newDay.text();
 		if(text === '+'){
 			addDay();
 		}else{
-			setDay(parseInt(text), newDay);
+			setDay(parseInt(text), newDay, true);
+			//newDay.addClass('.current-day');
 		}
 	})	
 
